@@ -1,0 +1,3 @@
+X-Axis|CollisionX_10,CollisionX_25,CollisionX_30,CollisionX_35,CollisionX_40,CollisionX_50,CollisionX_60,CollisionX_75,Collision_X
+Y-Axis|CollisionY_10,CollisionY_25,CollisionY_30,CollisionY_35,CollisionY_40,CollisionY_50,CollisionY_60,CollisionY_75,Collision_Y
+Z-Axis|CollisionZ_10,CollisionZ_25,CollisionZ_30,CollisionZ_35,CollisionZ_40,CollisionZ_50,CollisionZ_60,CollisionZ_75,Collision_Z
