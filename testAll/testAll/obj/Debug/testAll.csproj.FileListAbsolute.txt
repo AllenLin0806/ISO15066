@@ -1,0 +1,24 @@
+C:\Users\allen.lin\source\repos\testAll\testAll\bin\Debug\testAll.exe.config
+C:\Users\allen.lin\source\repos\testAll\testAll\bin\Debug\testAll.exe
+C:\Users\allen.lin\source\repos\testAll\testAll\bin\Debug\testAll.pdb
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.csproj.AssemblyReference.cache
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.csproj.SuggestedBindingRedirects.cache
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.Properties.Resources.resources
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.csproj.GenerateResource.cache
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.csproj.CoreCompileInputs.cache
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.exe
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.pdb
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.TitleForm.resources
+C:\Users\allen.lin\source\repos\testAll\testAll\obj\Debug\testAll.BasicForm.resources
+D:\1SO15066 自動化系統\testAll\testAll\bin\Debug\testAll.exe.config
+D:\1SO15066 自動化系統\testAll\testAll\bin\Debug\testAll.exe
+D:\1SO15066 自動化系統\testAll\testAll\bin\Debug\testAll.pdb
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.AssemblyReference.cache
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.SuggestedBindingRedirects.cache
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.BasicForm.resources
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.TitleForm.resources
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.Properties.Resources.resources
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.GenerateResource.cache
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.CoreCompileInputs.cache
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.exe
+D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.pdb

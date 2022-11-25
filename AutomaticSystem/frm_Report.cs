@@ -171,7 +171,7 @@ namespace AutomaticSystem
         {
             foreach (string fname in System.IO.Directory.GetFiles(Rtxpath))
             {
-                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "RTX64Server" && System.IO.Path.GetExtension(fname) == ".txt")
+                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration" && System.IO.Path.GetExtension(fname) == ".txt")
                 {
                     string line;
                     vRtx.Clear();  //做完一次就清除

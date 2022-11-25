@@ -216,7 +216,10 @@
     <None Include="Resources\icons8_multiply.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\testAll\testAll\testAll.csproj">
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\testAll\testAll\testAll.csproj">
       <Project>{a22aaf97-fdee-4551-9dd7-e81818b0a600}</Project>
       <Name>testAll</Name>
     </ProjectReference>
