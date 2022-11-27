@@ -22,3 +22,14 @@ D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.GenerateRes
 D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.csproj.CoreCompileInputs.cache
 D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.exe
 D:\1SO15066 自動化系統\testAll\testAll\obj\Debug\testAll.pdb
+D:\ISO15066 tools\testAll\testAll\bin\Debug\testAll.exe.config
+D:\ISO15066 tools\testAll\testAll\bin\Debug\testAll.exe
+D:\ISO15066 tools\testAll\testAll\bin\Debug\testAll.pdb
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.csprojAssemblyReference.cache
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.BasicForm.resources
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.TitleForm.resources
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.Properties.Resources.resources
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.csproj.GenerateResource.cache
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.csproj.CoreCompileInputs.cache
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.exe
+D:\ISO15066 tools\testAll\testAll\obj\Debug\testAll.pdb

@@ -30,7 +30,7 @@ namespace AutomaticSystem
             System.Diagnostics.Process[] vHewCtrlProcess = System.Diagnostics.Process.GetProcessesByName("CoboSafe-Vision");
             if (vHewCtrlProcess.Length == 0)
             {
-                System.Diagnostics.Process.Start(Application.StartupPath + @"\CoboSafe-Vision.lnk");
+                //System.Diagnostics.Process.Start(Application.StartupPath + @"\CoboSafe-Vision.lnk");
             }
 
             this.Visible = true;
@@ -38,6 +38,9 @@ namespace AutomaticSystem
             _frm_Help.MdiParent = this;
             _frm_Help.Show();
             _frm_Help.Width = 0;
+
+            frm_test test = new frm_test();
+            test.ShowDialog();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
