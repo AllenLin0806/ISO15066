@@ -17,7 +17,7 @@ namespace AutomaticSystem
 {
     public partial class frm_Report : BasicForm
     {
-        public static string[] K1K2;
+        public static string[] K1K2 = new string[0];
         public static int NewId;
         public static string HmiVersion;
         
@@ -171,7 +171,7 @@ namespace AutomaticSystem
         {
             foreach (string fname in System.IO.Directory.GetFiles(Rtxpath))
             {
-                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration" && System.IO.Path.GetExtension(fname) == ".txt")
+                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration" + DateTime.Now.ToString("yyyyMMdd") && System.IO.Path.GetExtension(fname) == ".txt")
                 {
                     string line;
                     vRtx.Clear();  //做完一次就清除
@@ -180,14 +180,19 @@ namespace AutomaticSystem
                     System.IO.StreamReader file = new System.IO.StreamReader(fname);
                     while ((line = file.ReadLine()) != null)
                     {
-                        if (line.Contains("GroupName") || line.Contains("SoftwareVersion"))
+                        //if (line.Contains("GroupName") || line.Contains("SoftwareVersion"))
+                        //{
+                        //    if (vRtx.Count < 4) { vRtx.Add(line.Trim()); }
+                        //    else
+                        //    {
+                        //        if (vRtx[2] == line || vRtx[3] == line) { }
+                        //        else { vRtx.Add(line.Trim()); }
+                        //    }
+                        //}
+                        if (line.Contains("Power_Name") || line.Contains("Power_FW") || line.Contains("J0_Name") || line.Contains("J0_FW") ||
+                            line.Contains("IO_Name") || line.Contains("IO_FW") || line.Contains("Patriot_L0_Name") || line.Contains("Patriot_L0_FW"))
                         {
-                            if (vRtx.Count < 4) { vRtx.Add(line.Trim()); }
-                            else
-                            {
-                                if (vRtx[2] == line || vRtx[3] == line) { }
-                                else { vRtx.Add(line.Trim()); }
-                            }
+                            vRtx.Add(line.Trim().Substring(0, line.LastIndexOf(',')));
                         }
                     }
                 }
@@ -219,11 +224,11 @@ namespace AutomaticSystem
 
                 if (vNumber.Count == 0) { MsgBox.Show("沒有Sensor log值，請確認是否放入檔案！", "警告", enMessageButton.OK, enMessageType.Warning); return; }
 
-                int N = 1, vLegth = 0;
+                int N = 1;
                 for (int j = 0; j <= K1K2.Length - 1; j++)
                 {
-                    if (j == 0) { if (!vNumber[0].Contains("ProjectStart")) { vLegth = 1; N = 0; } else { vLegth = 0; N = 1; } }
-                    for (int i = 0; i <= 3 - vLegth; i++)
+                    if (j == 0) { if (!vNumber[0].Contains("ProjectStart")) { N = 0; } else { N = 1; } }
+                    for (int i = 1; i <= 3; i++)
                     {
                         //if (vNumber[0].Contains("ProjectStart")) { continue; }
                         Sqlstr = _SqlData.GetData("Data", 1);
@@ -310,37 +315,34 @@ namespace AutomaticSystem
                 Worksheet sheet_M = workbook.Worksheets[(int)Sheets.testResult];
                 sheet_M.Range[4, 66].Text = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("en-us")).Substring(0,3) + "," + DateTime.Now.ToString("dd,yy");
                 int found;
-                if (vRtx.Count > 4)
+                if (vRtx.Count == 8)
                 {
                     for (int i = 0; i < vRtx.Count; i++)
                     {
-                        found = vRtx[i].IndexOf("=") + 1;
+                        found = vRtx[i].IndexOf(":") + 1;
                         switch (vRtx[i].Substring(found))
                         {
-                            case "Modular_IO":
-                                if (i < 4)
-                                {
-                                    found = vRtx[i + 1].IndexOf("=") + 1;
-                                    sheet_M.Range[27, 20].Text = vRtx[i + 1].Substring(found);
-                                }
-                                else
-                                {
-                                    found = vRtx[i + 1].IndexOf("=") + 1;
-                                    sheet_M.Range[33, 20].Text = vRtx[i + 1].Substring(found);
-                                }
+                            case "PowerManager/IOs":
+                                found = vRtx[i + 1].IndexOf(":") + 1;
+                                sheet_M.Range[27, 20].Text = vRtx[i + 1].Substring(found);
                                 break;
-                            case "AC_Servo_Driver":
-                                found = vRtx[i + 1].IndexOf("=") + 1;
+                            case "AC Servo Driver": //Joint
+                                found = vRtx[i + 1].IndexOf(":") + 1;
                                 sheet_M.Range[31, 20].Text = vRtx[i + 1].Substring(found);
                                 break;
-                            case "Safety":
-                                found = vRtx[i + 1].IndexOf("=") + 1;
+                            case "Multi-IO Module":
+                                found = vRtx[i + 1].IndexOf(":") + 1;
+                                sheet_M.Range[33, 20].Text = vRtx[i + 1].Substring(found);
+                                break;
+                            case "Patriot L0":  //Safety
+                                found = vRtx[i + 1].IndexOf(":") + 1;
                                 sheet_M.Range[29, 20].Text = vRtx[i + 1].Substring(found);
                                 break;
                         }
-                        i += 1;
+                        i++;
                     }
                 }
+                else { MsgBox.Show("數量有誤，請重新確認！", "警告", enMessageButton.OK, enMessageType.Warning); }
                 sheet_M.Range[21, 20].Text = txtArmName.Text;
                 sheet_M.Range[23, 20].Text = txtCbName.Text;
                 sheet_M.Range[25, 20].Text = lblHMI.Text;
@@ -668,10 +670,10 @@ namespace AutomaticSystem
                 txtArmName.Text = lblPlc.Text.Substring(lblPlc.Text.IndexOf('_') + 1) + "xxxx#";
                 //txtFileName.Text = lblPlc.Text.Substring(0, Convert.ToInt32(lblPlc.Text.IndexOf('_'))) + "_";
 
-                //if (txtArmName.Text.Contains("TM4S_") || txtArmName.Text.Contains("TM6S_") || txtArmName.Text.Contains("700") || txtArmName.Text.Contains("900"))
-                //{ txtCbName.Text = "Regular payload series standard control box_"; }
-                //else
-                //{ txtCbName.Text = "Medium & heavy payload series standard control box_"; }
+                if (txtArmName.Text.Contains("TM5S_") || txtArmName.Text.Contains("TM7S_") || txtArmName.Text.Contains("700") || txtArmName.Text.Contains("900"))
+                { txtCbName.Text = "Regular payload series standard control box_"; }
+                else
+                { txtCbName.Text = "Medium & heavy payload series standard control box_"; }
             }
 
             if (lblPlc.BackColor == Color.Gray) { MsgBox.Show("請先選擇公版！", "警告", enMessageButton.OK, enMessageType.Warning); return; }
@@ -1069,6 +1071,28 @@ namespace AutomaticSystem
         private void cbx10_1_Leave(object sender, EventArgs e)
         {
             if (!cbx10_1.Text.Contains("/")) { MsgBox.Show("格式有誤!"); cbx10_1.Focus(); return; }
+        }
+
+        private void btnK1K2_Click(object sender, EventArgs e)
+        {
+            if (plK1K2.Visible == true)
+            {
+                plK1K2.Visible = false;
+            }
+            else
+            {
+                plK1K2.Visible = true;
+                //if (K1K2.Where(val => val != String.Empty).ToArray().Length == 0) { txtK1K2.Text = "\r\n目前無資訊"; return; }
+                K1K2 = new string[] {
+                    "CollisionX_10", "CollisionX_25", "CollisionX_30", "CollisionX_35", "CollisionX_40", "CollisionX_50", "CollisionX_60", "CollisionX_75",
+                    "CollisionY_10", "CollisionY_25", "CollisionY_30", "CollisionY_35", "CollisionY_40", "CollisionY_50", "CollisionY_60", "CollisionY_75",
+                    "CollisionZ_10", "CollisionZ_25", "CollisionZ_30", "CollisionZ_35", "CollisionZ_40", "CollisionZ_50", "CollisionZ_60", "CollisionZ_75"
+                };
+                for (int i = 0; i < K1K2.Length; i++)
+                {
+                    txtK1K2.Text += K1K2[i] + "\r\n";
+                }
+            }
         }
 
         private void btnOK_Click(object sender, EventArgs e)

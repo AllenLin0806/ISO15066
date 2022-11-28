@@ -166,3 +166,4 @@ D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.csproj.CoreCompileIn
 D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.csproj.CopyComplete
 D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.exe
 D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.pdb
+D:\1SO15066 自動化系統\AutomaticSystem\obj\Debug\AutomaticSystem.frm_test.resources

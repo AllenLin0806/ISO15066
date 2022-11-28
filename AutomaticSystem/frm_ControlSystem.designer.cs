@@ -39,8 +39,10 @@ namespace AutomaticSystem
             this.btnContorl = new System.Windows.Forms.Button();
             this.plMain = new System.Windows.Forms.Panel();
             this.plProgressBar = new System.Windows.Forms.Panel();
+            this.btnDone = new System.Windows.Forms.Button();
             this.lblbgker = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblDisplay = new System.Windows.Forms.Label();
             this.lblIcon = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gbState = new System.Windows.Forms.GroupBox();
@@ -58,7 +60,6 @@ namespace AutomaticSystem
             this.plSe2 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
             this.txtPointProject = new System.Windows.Forms.TextBox();
-            this.lblDisplay = new System.Windows.Forms.Label();
             this.lblReset = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -123,7 +124,6 @@ namespace AutomaticSystem
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
-            this.btnDone = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.plMain.SuspendLayout();
             this.plProgressBar.SuspendLayout();
@@ -218,6 +218,18 @@ namespace AutomaticSystem
             this.plProgressBar.Size = new System.Drawing.Size(382, 117);
             this.plProgressBar.TabIndex = 57;
             // 
+            // btnDone
+            // 
+            this.btnDone.Font = new System.Drawing.Font("微軟正黑體", 14F);
+            this.btnDone.Location = new System.Drawing.Point(177, 86);
+            this.btnDone.Name = "btnDone";
+            this.btnDone.Size = new System.Drawing.Size(68, 29);
+            this.btnDone.TabIndex = 42;
+            this.btnDone.Text = "完成";
+            this.btnDone.UseVisualStyleBackColor = true;
+            this.btnDone.Visible = false;
+            this.btnDone.Click += new System.EventHandler(this.btnDone_Click);
+            // 
             // lblbgker
             // 
             this.lblbgker.AutoSize = true;
@@ -234,6 +246,17 @@ namespace AutomaticSystem
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(262, 29);
             this.progressBar1.TabIndex = 22;
+            // 
+            // lblDisplay
+            // 
+            this.lblDisplay.AutoSize = true;
+            this.lblDisplay.Font = new System.Drawing.Font("微軟正黑體", 16F, System.Drawing.FontStyle.Bold);
+            this.lblDisplay.Location = new System.Drawing.Point(254, 86);
+            this.lblDisplay.Name = "lblDisplay";
+            this.lblDisplay.Size = new System.Drawing.Size(125, 28);
+            this.lblDisplay.TabIndex = 41;
+            this.lblDisplay.Text = "No Project";
+            this.lblDisplay.Visible = false;
             // 
             // lblIcon
             // 
@@ -426,17 +449,6 @@ namespace AutomaticSystem
             this.txtPointProject.Size = new System.Drawing.Size(267, 56);
             this.txtPointProject.TabIndex = 42;
             // 
-            // lblDisplay
-            // 
-            this.lblDisplay.AutoSize = true;
-            this.lblDisplay.Font = new System.Drawing.Font("微軟正黑體", 16F, System.Drawing.FontStyle.Bold);
-            this.lblDisplay.Location = new System.Drawing.Point(254, 86);
-            this.lblDisplay.Name = "lblDisplay";
-            this.lblDisplay.Size = new System.Drawing.Size(125, 28);
-            this.lblDisplay.TabIndex = 41;
-            this.lblDisplay.Text = "No Project";
-            this.lblDisplay.Visible = false;
-            // 
             // lblReset
             // 
             this.lblReset.AutoSize = true;
@@ -497,7 +509,7 @@ namespace AutomaticSystem
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(267, 34);
             this.txtIP.TabIndex = 1;
-            this.txtIP.Text = "172.25.117.57";
+            this.txtIP.Text = "172.25.50.39";
             this.txtIP.Enter += new System.EventHandler(this.TextBoxE_Enter);
             this.txtIP.Leave += new System.EventHandler(this.TextBoxL_Leave);
             // 
@@ -1212,18 +1224,6 @@ namespace AutomaticSystem
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
-            // 
-            // btnDone
-            // 
-            this.btnDone.Font = new System.Drawing.Font("微軟正黑體", 14F);
-            this.btnDone.Location = new System.Drawing.Point(177, 86);
-            this.btnDone.Name = "btnDone";
-            this.btnDone.Size = new System.Drawing.Size(68, 29);
-            this.btnDone.TabIndex = 42;
-            this.btnDone.Text = "完成";
-            this.btnDone.UseVisualStyleBackColor = true;
-            this.btnDone.Visible = false;
-            this.btnDone.Click += new System.EventHandler(this.btnDone_Click);
             // 
             // frm_ControlSystem
             // 

@@ -20,7 +20,7 @@ namespace AutomaticSystem
         List<string> vRtx = new List<string>();
         public void txtRead()
         {
-            foreach (string fname in System.IO.Directory.GetFiles(@"D:\ISO15066 tools"))
+            foreach (string fname in System.IO.Directory.GetFiles(@"D:\1SO15066 自動化系統"))
             {
                 if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration_" + DateTime.Now.ToString("yyyyMMdd") && System.IO.Path.GetExtension(fname) == ".txt")
                 {
@@ -53,19 +53,19 @@ namespace AutomaticSystem
                     {
                         case "PowerManager/IOs":
                             found = vRtx[i + 1].IndexOf(":") + 1;
-                            vRtx[i + 1].Substring(found);
+                            textBox1.Text += vRtx[i + 1].Substring(found) + "\r\n";
                             break;
                         case "AC Servo Driver":
                             found = vRtx[i + 1].IndexOf(":") + 1;
-                            vRtx[i + 1].Substring(found);
+                            textBox1.Text += vRtx[i + 1].Substring(found) + "\r\n";
                             break;
                         case "Multi-IO Module":
                             found = vRtx[i + 1].IndexOf(":") + 1;
-                            vRtx[i + 1].Substring(found);
+                            textBox1.Text += vRtx[i + 1].Substring(found) + "\r\n";
                             break;
                         case "Patriot L0":
                             found = vRtx[i + 1].IndexOf(":") + 1;
-                            vRtx[i + 1].Substring(found);
+                            textBox1.Text += vRtx[i + 1].Substring(found) + "\r\n";
                             break;
                     }
                     i++;
