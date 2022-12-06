@@ -31,6 +31,10 @@ namespace AutomaticSystem
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frm_Report));
             this.pMain = new System.Windows.Forms.Panel();
+            this.plK1K2 = new System.Windows.Forms.Panel();
+            this.clbK1K2 = new System.Windows.Forms.CheckedListBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtK1K2 = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gbUp = new System.Windows.Forms.GroupBox();
             this.LV1 = new System.Windows.Forms.ListView();
@@ -48,6 +52,8 @@ namespace AutomaticSystem
             this.lblHMI = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.gbData = new System.Windows.Forms.GroupBox();
+            this.cbForcemax = new System.Windows.Forms.CheckBox();
+            this.btnK1K2 = new System.Windows.Forms.Button();
             this.txtdataID = new System.Windows.Forms.TextBox();
             this.btnDatamodify = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
@@ -78,6 +84,8 @@ namespace AutomaticSystem
             this.txtPath = new System.Windows.Forms.TextBox();
             this.lblPath = new System.Windows.Forms.Label();
             this.gbManual = new System.Windows.Forms.GroupBox();
+            this.customBox1 = new AutomaticSystem.CustomBox();
+            this.cbx10_1 = new AutomaticSystem.CustomBox();
             this.chb75SH70 = new System.Windows.Forms.CheckBox();
             this.chb60SH30 = new System.Windows.Forms.CheckBox();
             this.chb50SH30 = new System.Windows.Forms.CheckBox();
@@ -88,22 +96,17 @@ namespace AutomaticSystem
             this.chb10SH10 = new System.Windows.Forms.CheckBox();
             this.txtPID = new System.Windows.Forms.TextBox();
             this.fbD_path = new System.Windows.Forms.FolderBrowserDialog();
-            this.btnK1K2 = new System.Windows.Forms.Button();
-            this.plK1K2 = new System.Windows.Forms.Panel();
-            this.txtK1K2 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.customBox1 = new AutomaticSystem.CustomBox();
-            this.cbx10_1 = new AutomaticSystem.CustomBox();
             this.pMain.SuspendLayout();
+            this.plK1K2.SuspendLayout();
             this.panel2.SuspendLayout();
             this.gbUp.SuspendLayout();
             this.gbData.SuspendLayout();
             this.gbManual.SuspendLayout();
-            this.plK1K2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pMain
             // 
+            this.pMain.Controls.Add(this.plK1K2);
             this.pMain.Controls.Add(this.panel2);
             this.pMain.Controls.Add(this.gbManual);
             this.pMain.Controls.Add(this.txtPID);
@@ -112,6 +115,52 @@ namespace AutomaticSystem
             this.pMain.Name = "pMain";
             this.pMain.Size = new System.Drawing.Size(1360, 894);
             this.pMain.TabIndex = 68;
+            // 
+            // plK1K2
+            // 
+            this.plK1K2.BackColor = System.Drawing.Color.LightGreen;
+            this.plK1K2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.plK1K2.Controls.Add(this.clbK1K2);
+            this.plK1K2.Controls.Add(this.label9);
+            this.plK1K2.Controls.Add(this.txtK1K2);
+            this.plK1K2.Location = new System.Drawing.Point(26, 454);
+            this.plK1K2.Name = "plK1K2";
+            this.plK1K2.Size = new System.Drawing.Size(207, 379);
+            this.plK1K2.TabIndex = 99;
+            this.plK1K2.Visible = false;
+            this.plK1K2.DoubleClick += new System.EventHandler(this.plK1K2_DoubleClick);
+            // 
+            // clbK1K2
+            // 
+            this.clbK1K2.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.clbK1K2.FormattingEnabled = true;
+            this.clbK1K2.Location = new System.Drawing.Point(206, 32);
+            this.clbK1K2.Name = "clbK1K2";
+            this.clbK1K2.Size = new System.Drawing.Size(131, 328);
+            this.clbK1K2.TabIndex = 3;
+            this.clbK1K2.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbK1K2_ItemCheck);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
+            this.label9.Location = new System.Drawing.Point(16, 8);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(186, 21);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "請確認數值數量是否正確";
+            // 
+            // txtK1K2
+            // 
+            this.txtK1K2.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.txtK1K2.Location = new System.Drawing.Point(15, 32);
+            this.txtK1K2.Multiline = true;
+            this.txtK1K2.Name = "txtK1K2";
+            this.txtK1K2.ReadOnly = true;
+            this.txtK1K2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtK1K2.Size = new System.Drawing.Size(175, 332);
+            this.txtK1K2.TabIndex = 0;
+            this.txtK1K2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // panel2
             // 
@@ -354,7 +403,7 @@ namespace AutomaticSystem
             // 
             // gbData
             // 
-            this.gbData.Controls.Add(this.plK1K2);
+            this.gbData.Controls.Add(this.cbForcemax);
             this.gbData.Controls.Add(this.btnK1K2);
             this.gbData.Controls.Add(this.txtdataID);
             this.gbData.Controls.Add(this.btnDatamodify);
@@ -373,10 +422,33 @@ namespace AutomaticSystem
             this.gbData.TabStop = false;
             this.gbData.Text = "Data-正常模式";
             // 
+            // cbForcemax
+            // 
+            this.cbForcemax.AutoSize = true;
+            this.cbForcemax.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.cbForcemax.Location = new System.Drawing.Point(402, 96);
+            this.cbForcemax.Name = "cbForcemax";
+            this.cbForcemax.Size = new System.Drawing.Size(105, 24);
+            this.cbForcemax.TabIndex = 99;
+            this.cbForcemax.Text = "Force Max";
+            this.cbForcemax.UseVisualStyleBackColor = true;
+            this.cbForcemax.CheckedChanged += new System.EventHandler(this.cbForcemax_CheckedChanged);
+            // 
+            // btnK1K2
+            // 
+            this.btnK1K2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnK1K2.Location = new System.Drawing.Point(3, 29);
+            this.btnK1K2.Name = "btnK1K2";
+            this.btnK1K2.Size = new System.Drawing.Size(93, 23);
+            this.btnK1K2.TabIndex = 98;
+            this.btnK1K2.Text = "匯入資訊";
+            this.btnK1K2.UseVisualStyleBackColor = true;
+            this.btnK1K2.Click += new System.EventHandler(this.btnK1K2_Click);
+            // 
             // txtdataID
             // 
             this.txtdataID.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.txtdataID.Location = new System.Drawing.Point(475, 92);
+            this.txtdataID.Location = new System.Drawing.Point(480, 23);
             this.txtdataID.Name = "txtdataID";
             this.txtdataID.Size = new System.Drawing.Size(30, 25);
             this.txtdataID.TabIndex = 97;
@@ -736,12 +808,33 @@ namespace AutomaticSystem
             this.gbManual.Controls.Add(this.chb25SH70);
             this.gbManual.Controls.Add(this.chb10SH10);
             this.gbManual.Font = new System.Drawing.Font("微軟正黑體", 15F, System.Drawing.FontStyle.Bold);
-            this.gbManual.Location = new System.Drawing.Point(426, 470);
+            this.gbManual.Location = new System.Drawing.Point(446, 470);
             this.gbManual.Name = "gbManual";
             this.gbManual.Size = new System.Drawing.Size(611, 421);
             this.gbManual.TabIndex = 95;
             this.gbManual.TabStop = false;
             this.gbManual.Text = "Data-手動模式";
+            // 
+            // customBox1
+            // 
+            this.customBox1.Font = new System.Drawing.Font("微軟正黑體", 11F);
+            this.customBox1.Location = new System.Drawing.Point(217, 101);
+            this.customBox1.Name = "customBox1";
+            this.customBox1.PlaceHolder = "";
+            this.customBox1.Size = new System.Drawing.Size(81, 27);
+            this.customBox1.TabIndex = 109;
+            this.customBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // cbx10_1
+            // 
+            this.cbx10_1.Font = new System.Drawing.Font("微軟正黑體", 11F);
+            this.cbx10_1.Location = new System.Drawing.Point(116, 101);
+            this.cbx10_1.Name = "cbx10_1";
+            this.cbx10_1.PlaceHolder = "";
+            this.cbx10_1.Size = new System.Drawing.Size(81, 27);
+            this.cbx10_1.TabIndex = 108;
+            this.cbx10_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.cbx10_1.Leave += new System.EventHandler(this.cbx10_1_Leave);
             // 
             // chb75SH70
             // 
@@ -839,72 +932,6 @@ namespace AutomaticSystem
             this.txtPID.Size = new System.Drawing.Size(27, 25);
             this.txtPID.TabIndex = 91;
             // 
-            // btnK1K2
-            // 
-            this.btnK1K2.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnK1K2.Location = new System.Drawing.Point(3, 29);
-            this.btnK1K2.Name = "btnK1K2";
-            this.btnK1K2.Size = new System.Drawing.Size(93, 23);
-            this.btnK1K2.TabIndex = 98;
-            this.btnK1K2.Text = "匯入資訊";
-            this.btnK1K2.UseVisualStyleBackColor = true;
-            this.btnK1K2.Click += new System.EventHandler(this.btnK1K2_Click);
-            // 
-            // plK1K2
-            // 
-            this.plK1K2.BackColor = System.Drawing.Color.LightGreen;
-            this.plK1K2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.plK1K2.Controls.Add(this.label9);
-            this.plK1K2.Controls.Add(this.txtK1K2);
-            this.plK1K2.Location = new System.Drawing.Point(104, 30);
-            this.plK1K2.Name = "plK1K2";
-            this.plK1K2.Size = new System.Drawing.Size(207, 379);
-            this.plK1K2.TabIndex = 99;
-            this.plK1K2.Visible = false;
-            // 
-            // txtK1K2
-            // 
-            this.txtK1K2.Font = new System.Drawing.Font("微軟正黑體", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.txtK1K2.Location = new System.Drawing.Point(15, 32);
-            this.txtK1K2.Multiline = true;
-            this.txtK1K2.Name = "txtK1K2";
-            this.txtK1K2.ReadOnly = true;
-            this.txtK1K2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtK1K2.Size = new System.Drawing.Size(175, 332);
-            this.txtK1K2.TabIndex = 0;
-            this.txtK1K2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Bold);
-            this.label9.Location = new System.Drawing.Point(11, 8);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(186, 21);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "請確認數值數量是否正確";
-            // 
-            // customBox1
-            // 
-            this.customBox1.Font = new System.Drawing.Font("微軟正黑體", 11F);
-            this.customBox1.Location = new System.Drawing.Point(217, 101);
-            this.customBox1.Name = "customBox1";
-            this.customBox1.PlaceHolder = "";
-            this.customBox1.Size = new System.Drawing.Size(81, 27);
-            this.customBox1.TabIndex = 109;
-            this.customBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // cbx10_1
-            // 
-            this.cbx10_1.Font = new System.Drawing.Font("微軟正黑體", 11F);
-            this.cbx10_1.Location = new System.Drawing.Point(116, 101);
-            this.cbx10_1.Name = "cbx10_1";
-            this.cbx10_1.PlaceHolder = "";
-            this.cbx10_1.Size = new System.Drawing.Size(81, 27);
-            this.cbx10_1.TabIndex = 108;
-            this.cbx10_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.cbx10_1.Leave += new System.EventHandler(this.cbx10_1_Leave);
-            // 
             // frm_Report
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -922,6 +949,8 @@ namespace AutomaticSystem
             this.Controls.SetChildIndex(this.pMain, 0);
             this.pMain.ResumeLayout(false);
             this.pMain.PerformLayout();
+            this.plK1K2.ResumeLayout(false);
+            this.plK1K2.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.gbUp.ResumeLayout(false);
@@ -930,8 +959,6 @@ namespace AutomaticSystem
             this.gbData.PerformLayout();
             this.gbManual.ResumeLayout(false);
             this.gbManual.PerformLayout();
-            this.plK1K2.ResumeLayout(false);
-            this.plK1K2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -967,16 +994,6 @@ namespace AutomaticSystem
         private System.Windows.Forms.TextBox txtHW2;
         public System.Windows.Forms.Label lblHMI;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.GroupBox gbData;
-        private System.Windows.Forms.TextBox txtdataID;
-        private System.Windows.Forms.Button btnDatamodify;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox txtFS;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox txtFT;
-        private System.Windows.Forms.Label lblType;
-        private System.Windows.Forms.Button btnNumber;
-        private System.Windows.Forms.ListView LV2;
         private System.Windows.Forms.Button btnUp;
         private System.Windows.Forms.ComboBox cbTester;
         private System.Windows.Forms.ComboBox cbHW;
@@ -997,10 +1014,22 @@ namespace AutomaticSystem
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label lblPath;
-        private System.Windows.Forms.Button btnK1K2;
         private System.Windows.Forms.Panel plK1K2;
         private System.Windows.Forms.TextBox txtK1K2;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox gbData;
+        private System.Windows.Forms.CheckBox cbForcemax;
+        private System.Windows.Forms.Button btnK1K2;
+        private System.Windows.Forms.TextBox txtdataID;
+        private System.Windows.Forms.Button btnDatamodify;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox txtFS;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtFT;
+        private System.Windows.Forms.Label lblType;
+        private System.Windows.Forms.Button btnNumber;
+        private System.Windows.Forms.ListView LV2;
+        private System.Windows.Forms.CheckedListBox clbK1K2;
     }
 }
 

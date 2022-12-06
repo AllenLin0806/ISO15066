@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,12 +7,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using Spire.Xls;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using testAll;
+using CheckState = System.Windows.Forms.CheckState;
+using Ookii.Dialogs.WinForms;
 
 namespace AutomaticSystem
 {
@@ -171,7 +173,7 @@ namespace AutomaticSystem
         {
             foreach (string fname in System.IO.Directory.GetFiles(Rtxpath))
             {
-                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration" + DateTime.Now.ToString("yyyyMMdd") && System.IO.Path.GetExtension(fname) == ".txt")
+                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "Robot_Configuration_" + DateTime.Now.ToString("yyyyMMdd") && System.IO.Path.GetExtension(fname) == ".txt")
                 {
                     string line;
                     vRtx.Clear();  //做完一次就清除
@@ -315,34 +317,37 @@ namespace AutomaticSystem
                 Worksheet sheet_M = workbook.Worksheets[(int)Sheets.testResult];
                 sheet_M.Range[4, 66].Text = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("en-us")).Substring(0,3) + "," + DateTime.Now.ToString("dd,yy");
                 int found;
-                if (vRtx.Count == 8)
+                if (cbHW.Text == "5.0")
                 {
-                    for (int i = 0; i < vRtx.Count; i++)
+                    if (vRtx.Count == 8)
                     {
-                        found = vRtx[i].IndexOf(":") + 1;
-                        switch (vRtx[i].Substring(found))
+                        for (int i = 0; i < vRtx.Count; i++)
                         {
-                            case "PowerManager/IOs":
-                                found = vRtx[i + 1].IndexOf(":") + 1;
-                                sheet_M.Range[27, 20].Text = vRtx[i + 1].Substring(found);
-                                break;
-                            case "AC Servo Driver": //Joint
-                                found = vRtx[i + 1].IndexOf(":") + 1;
-                                sheet_M.Range[31, 20].Text = vRtx[i + 1].Substring(found);
-                                break;
-                            case "Multi-IO Module":
-                                found = vRtx[i + 1].IndexOf(":") + 1;
-                                sheet_M.Range[33, 20].Text = vRtx[i + 1].Substring(found);
-                                break;
-                            case "Patriot L0":  //Safety
-                                found = vRtx[i + 1].IndexOf(":") + 1;
-                                sheet_M.Range[29, 20].Text = vRtx[i + 1].Substring(found);
-                                break;
+                            found = vRtx[i].IndexOf(":") + 1;
+                            switch (vRtx[i].Substring(found).Trim())
+                            {
+                                case "PowerManager/IOs":
+                                    found = vRtx[i + 1].IndexOf(":") + 1;
+                                    sheet_M.Range[27, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                                case "AC Servo Driver": //Joint
+                                    found = vRtx[i + 1].IndexOf(":") + 1;
+                                    sheet_M.Range[31, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                                case "Multi-IO Module":
+                                    found = vRtx[i + 1].IndexOf(":") + 1;
+                                    sheet_M.Range[33, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                                case "Patriot L0":  //Safety
+                                    found = vRtx[i + 1].IndexOf(":") + 1;
+                                    sheet_M.Range[29, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                            }
+                            i++;
                         }
-                        i++;
                     }
+                    else { MsgBox.Show("數量有誤，請重新確認！", "警告", enMessageButton.OK, enMessageType.Warning); return; }
                 }
-                else { MsgBox.Show("數量有誤，請重新確認！", "警告", enMessageButton.OK, enMessageType.Warning); }
                 sheet_M.Range[21, 20].Text = txtArmName.Text;
                 sheet_M.Range[23, 20].Text = txtCbName.Text;
                 sheet_M.Range[25, 20].Text = lblHMI.Text;
@@ -351,179 +356,199 @@ namespace AutomaticSystem
                 sheet_M.Range[96, 3].Text = txtArmName.Text.Substring(txtArmName.Text.IndexOf('#') + 1);
                 sheet_M.Range[110, 9].Text = "#" + txtArmName.Text.Substring(txtArmName.Text.IndexOf('#') + 1);
 
-                //K1K2 = new string[] { 
+                //K1K2 = new string[] {
                 //    "CollisionX_10", "CollisionX_25", "CollisionX_30", "CollisionX_35", "CollisionX_40", "CollisionX_50", "CollisionX_60", "CollisionX_75",
                 //    "CollisionY_10", "CollisionY_25", "CollisionY_30", "CollisionY_35", "CollisionY_40", "CollisionY_50", "CollisionY_60", "CollisionY_75",
                 //    "CollisionZ_10", "CollisionZ_25", "CollisionZ_30", "CollisionZ_35", "CollisionZ_40", "CollisionZ_50", "CollisionZ_60", "CollisionZ_75"
                 //};
-                if (K1K2 != null) 
+                if (cbHW.Text == "5.0")
                 {
-                    int FT1, FT2, FT3, FS1, FS2, FS3, vID = 2;
-                    for (int i = 0; i <= K1K2.Length - 2; i++)
+                    if (K1K2 != null)
                     {
-                        Sqlstr = _SqlData.GetData("Data", 4);
-                        Sqlstr = Sqlstr.Replace("?1", NewId + "");
-                        Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
-                        DataTable DT0 = ConnectQuery(Sqlstr);
-                        FT1 = int.Parse(DT0.Rows[0][0].ToString());
-                        FT2 = int.Parse(DT0.Rows[1][0].ToString());
-                        FT3 = int.Parse(DT0.Rows[2][0].ToString());
-                        FS1 = int.Parse(DT0.Rows[0][1].ToString());
-                        FS2 = int.Parse(DT0.Rows[1][1].ToString());
-                        FS3 = int.Parse(DT0.Rows[2][1].ToString());
-                        if (FT1 - FT2 <= 5 && FT1 - FT3 <= 5 && -(FT2 - FT3) * -1 <= 5)
+                        int FT1, FT2, FT3, FS1, FS2, FS3, vID = 2;
+                        for (int i = 0; i <= K1K2.Length - 1; i++)
                         {
-                            Sqlstr = _SqlData.GetData("Data", 5);
+                            Sqlstr = _SqlData.GetData("Data", 4);
                             Sqlstr = Sqlstr.Replace("?1", NewId + "");
                             Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
-                        }
-                        else if (FT1 - FT2 > 5 && FT1 - FT3 > 5 && -(FT2 - FT3) * -1 <= 5)
-                        {
-                            Sqlstr = _SqlData.GetData("Data", 6);
-                            Sqlstr = Sqlstr.Replace("?1", NewId + "");
-                            Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
-                        }
-                        else
-                        {
-                            Sqlstr = _SqlData.GetData("Data", 5);
-                            Sqlstr = Sqlstr.Replace("?1", NewId + "");
-                            Sqlstr = Sqlstr.Replace("?2", NewId + vID + ""); //原本有+1
-                        }
+                            DataTable DT0 = ConnectQuery(Sqlstr);
+                            FT1 = int.Parse(DT0.Rows[0][0].ToString());
+                            FT2 = int.Parse(DT0.Rows[1][0].ToString());
+                            FT3 = int.Parse(DT0.Rows[2][0].ToString());
+                            FS1 = int.Parse(DT0.Rows[0][1].ToString());
+                            FS2 = int.Parse(DT0.Rows[1][1].ToString());
+                            FS3 = int.Parse(DT0.Rows[2][1].ToString());
+                            if (FT1 - FT2 <= 5 && FT1 - FT3 <= 5 && -(FT2 - FT3) * -1 <= 5)
+                            {
+                                Sqlstr = _SqlData.GetData("Data", 5);
+                                Sqlstr = Sqlstr.Replace("?1", NewId + "");
+                                Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
+                            }
+                            else if (FT1 - FT2 > 5 && FT1 - FT3 > 5 && -(FT2 - FT3) * -1 <= 5)
+                            {
+                                if (FT1 == FT2)
+                                {
+                                    Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT <= (select max(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                                    Sqlstr += "and FT > (select min(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2 order by FT desc";
+                                    Sqlstr = Sqlstr.Replace("?1", NewId + "");
+                                    Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
+                                }
+                                else if (FT2 == FT3)
+                                {
+                                    Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT < (select max(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                                    Sqlstr += "and FT >= (select min(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2 order by FT desc";
+                                    Sqlstr = Sqlstr.Replace("?1", NewId + "");
+                                    Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
+                                }
+                                else
+                                {
+                                    Sqlstr = _SqlData.GetData("Data", 6);
+                                    Sqlstr = Sqlstr.Replace("?1", NewId + "");
+                                    Sqlstr = Sqlstr.Replace("?2", NewId + vID + "");
+                                }
+                            }
+                            else
+                            {
+                                Sqlstr = _SqlData.GetData("Data", 5);
+                                Sqlstr = Sqlstr.Replace("?1", NewId + "");
+                                Sqlstr = Sqlstr.Replace("?2", NewId + vID + ""); //原本有+1
+                            }
 
-                        DataTable DT = ConnectQuery(Sqlstr);
-                        if (DT.Rows[0][0].ToString() == "X")
-                        {
-                            if (DT.Rows[0][1].ToString() == "10SH10")
+                            DataTable DT = ConnectQuery(Sqlstr);
+                            if (DT.Rows[0][0].ToString() == "X")
                             {
-                                sheet_M.Range[113, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[113, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                if (DT.Rows[0][1].ToString() == "10SH10")
+                                {
+                                    sheet_M.Range[113, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[113, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "25SH70")
+                                {
+                                    sheet_M.Range[114, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[114, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "30SH30")
+                                {
+                                    sheet_M.Range[115, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[115, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "35SH30")
+                                {
+                                    sheet_M.Range[116, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[116, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "40SH70")
+                                {
+                                    sheet_M.Range[117, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[117, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "50SH30")
+                                {
+                                    sheet_M.Range[118, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[118, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "60SH30")
+                                {
+                                    sheet_M.Range[119, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[119, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "75SH70")
+                                {
+                                    sheet_M.Range[120, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[120, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
                             }
-                            else if (DT.Rows[0][1].ToString() == "25SH70")
+                            else if (DT.Rows[0][0].ToString() == "Y")
                             {
-                                sheet_M.Range[114, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[114, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                if (DT.Rows[0][1].ToString() == "10SH10")
+                                {
+                                    sheet_M.Range[113, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[113, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "25SH70")
+                                {
+                                    sheet_M.Range[114, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[114, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "30SH30")
+                                {
+                                    sheet_M.Range[115, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[115, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "35SH30")
+                                {
+                                    sheet_M.Range[116, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[116, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "40SH70")
+                                {
+                                    sheet_M.Range[117, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[117, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "50SH30")
+                                {
+                                    sheet_M.Range[118, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[118, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "60SH30")
+                                {
+                                    sheet_M.Range[119, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[119, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "75SH70")
+                                {
+                                    sheet_M.Range[120, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[120, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
                             }
-                            else if (DT.Rows[0][1].ToString() == "30SH30")
+                            else if (DT.Rows[0][0].ToString() == "Z")
                             {
-                                sheet_M.Range[115, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[115, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                if (DT.Rows[0][1].ToString() == "10SH10")
+                                {
+                                    sheet_M.Range[113, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[113, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "25SH70")
+                                {
+                                    sheet_M.Range[114, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[114, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "30SH30")
+                                {
+                                    sheet_M.Range[115, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[115, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "35SH30")
+                                {
+                                    sheet_M.Range[116, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[116, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "40SH70")
+                                {
+                                    sheet_M.Range[117, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[117, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "50SH30")
+                                {
+                                    sheet_M.Range[118, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[118, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "60SH30")
+                                {
+                                    sheet_M.Range[119, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[119, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
+                                else if (DT.Rows[0][1].ToString() == "75SH70")
+                                {
+                                    sheet_M.Range[120, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
+                                    sheet_M.Range[120, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
+                                }
                             }
-                            else if (DT.Rows[0][1].ToString() == "35SH30")
-                            {
-                                sheet_M.Range[116, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[116, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "40SH70")
-                            {
-                                sheet_M.Range[117, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[117, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "50SH30")
-                            {
-                                sheet_M.Range[118, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[118, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "60SH30")
-                            {
-                                sheet_M.Range[119, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[119, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "75SH70")
-                            {
-                                sheet_M.Range[120, 20].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[120, 28].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
+                            NewId += 3;
                         }
-                        else if (DT.Rows[0][0].ToString() == "Y")
-                        {
-                            if (DT.Rows[0][1].ToString() == "10SH10")
-                            {
-                                sheet_M.Range[113, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[113, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "25SH70")
-                            {
-                                sheet_M.Range[114, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[114, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "30SH30")
-                            {
-                                sheet_M.Range[115, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[115, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "35SH30")
-                            {
-                                sheet_M.Range[116, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[116, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "40SH70")
-                            {
-                                sheet_M.Range[117, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[117, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "50SH30")
-                            {
-                                sheet_M.Range[118, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[118, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "60SH30")
-                            {
-                                sheet_M.Range[119, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[119, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "75SH70")
-                            {
-                                sheet_M.Range[120, 36].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[120, 44].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                        }
-                        else if (DT.Rows[0][0].ToString() == "Z")
-                        {
-                            if (DT.Rows[0][1].ToString() == "10SH10")
-                            {
-                                sheet_M.Range[113, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[113, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "25SH70")
-                            {
-                                sheet_M.Range[114, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[114, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "30SH30")
-                            {
-                                sheet_M.Range[115, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[115, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "35SH30")
-                            {
-                                sheet_M.Range[116, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[116, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "40SH70")
-                            {
-                                sheet_M.Range[117, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[117, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "50SH30")
-                            {
-                                sheet_M.Range[118, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[118, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "60SH30")
-                            {
-                                sheet_M.Range[119, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[119, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                            else if (DT.Rows[0][1].ToString() == "75SH70")
-                            {
-                                sheet_M.Range[120, 52].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][2].ToString()));
-                                sheet_M.Range[120, 60].Value = string.Format("{0:F2}", Convert.ToDouble(DT.Rows[0][3].ToString()));
-                            }
-                        }
-                        NewId += 3;
                     }
                 }
-                
+
                 if (K1K2.Where(val => val != String.Empty).ToArray().Length == myList.Count)
                 {
                     //加入圖片
@@ -544,10 +569,10 @@ namespace AutomaticSystem
                         else if (_Part == "25") { vK1K2 = Rows[(int)enK1K2.Chest]; }
                         else if (_Part == "30") { vK1K2 = Rows[(int)enK1K2.UpperArm]; }
                         else if (_Part == "35") { vK1K2 = Rows[(int)enK1K2.Back]; }
-                        else if (_Part == "40") { vK1K2 = Rows[(int)enK1K2.LowerLeg]; }
+                        else if (_Part == "40") { vK1K2 = Rows[(int)enK1K2.LowerArm]; }
                         else if (_Part == "50") { vK1K2 = Rows[(int)enK1K2.Thigh]; }
                         else if (_Part == "60") { vK1K2 = Rows[(int)enK1K2.LowerLeg]; }
-                        else if (_Part == "70") { vK1K2 = Rows[(int)enK1K2.Hands]; }
+                        else if (_Part == "75") { vK1K2 = Rows[(int)enK1K2.Hands]; }
                         
                         //將圖片匯入Excel
                         ExcelPicture picture = sheet.Pictures.Add(vK1K2, vAxis, txtPath.Text + "\\" + myList[i]);
@@ -683,14 +708,20 @@ namespace AutomaticSystem
         private void btnFilePath_Click(object sender, EventArgs e)
         {
             //FolderBrowserDialog path = new FolderBrowserDialog();
-            fbD_path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
-            fbD_path.ShowDialog();
-            txtPath.Text = fbD_path.SelectedPath;
+            //fbD_path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            //fbD_path.ShowDialog();
+            //txtPath.Text = fbD_path.SelectedPath;
+            //txtArmName.Focus();
+
+            VistaFolderBrowserDialog path = new VistaFolderBrowserDialog();
+            path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            path.ShowDialog();
+            txtPath.Text = path.SelectedPath;
             txtArmName.Focus();
         }
         #endregion
 
-        #region LV設定
+        #region LV、CheckListBox設定
         private void initLV(string title)
         {
             string Sqlstr;
@@ -776,6 +807,26 @@ namespace AutomaticSystem
             
         }
 
+        private enum enLV2Column : int
+        {
+            id = 0,
+            Axis = 1,
+            K1K2 = 2,
+            FT = 3,
+            FS = 4,
+            pid = 5,
+            done_datetime = 6,
+            last_datetime = 7,
+            ArmModel_SN = 8
+        }
+
+        private void LV2_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            txtdataID.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.id].Text;
+            txtFT.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.FT].Text;
+            txtFS.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.FS].Text;
+        }
+
         private void initLV2(string title)
         {
             LV2.Clear();
@@ -836,6 +887,59 @@ namespace AutomaticSystem
                     LV2.Items.Add(lvitem);
                 }
             }
+        }
+
+        private void initchecklistbox()
+        {
+            string Sqlstr;
+            Sqlstr = "select id,K1K2 from K1K2";
+            DataTable DT = ConnectQuery(Sqlstr);
+            clbK1K2.Items.Clear();
+            clbK1K2.Items.Add("全部選取");
+            foreach (DataRow DR in DT.Rows)
+            { clbK1K2.Items.Add(DR["K1K2"].ToString()); }
+        }
+
+        string[] StrAll = new string[0];
+        private void clbK1K2_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            string Sensor;
+            if (e.NewValue == CheckState.Unchecked)
+            {
+                if (e.Index == 0) 
+                {
+                    for (int i = 1; i < clbK1K2.Items.Count; i++)
+                    {
+                        clbK1K2.SetItemChecked(i, false);
+                    }
+                }
+                else 
+                {
+                    Sensor = clbK1K2.Items[e.Index] + "\r\n";
+                    txtK1K2.Text = txtK1K2.Text.Replace(Sensor, "");
+                }
+            }
+            else
+            {
+                if (e.Index == 0)
+                {
+                    for (int i = 1; i < clbK1K2.Items.Count; i++)
+                    {
+                        clbK1K2.SetItemChecked(i, true);
+                    }
+                }
+                else
+                {
+                    if (StrAll.Length < 24)
+                    { txtK1K2.Text += clbK1K2.Items[e.Index].ToString() + "\r\n"; }
+                }
+            }
+            
+            //重新排序
+            StrAll = txtK1K2.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            Array.Sort(StrAll);
+            txtK1K2.Text = String.Empty;
+            foreach (string S in StrAll) { txtK1K2.Text += S + "\r\n"; }
         }
         #endregion
 
@@ -1010,7 +1114,7 @@ namespace AutomaticSystem
         {
             txtFileName.Text = "Collision test (ISO-15066)_" + txtArmName.Text.Replace("#", "_");
 
-            if (txtArmName.Text.Contains("TM4S_") || txtArmName.Text.Contains("TM6S_"))
+            if (txtArmName.Text.Contains("TM5S_") || txtArmName.Text.Contains("TM7S_"))
             { txtCbName.Text = "Regular payload series standard control box" + txtArmName.Text.Substring(txtArmName.Text.IndexOf('_')).Replace("CA", "CC"); }
             else if (txtArmName.Text.Contains("700") || txtArmName.Text.Contains("900"))
             { txtCbName.Text = "Regular payload series standard control box" + txtArmName.Text.Substring(txtArmName.Text.IndexOf('_')).Replace("BA", "BC"); }
@@ -1031,36 +1135,17 @@ namespace AutomaticSystem
         private void btnNumber_Click(object sender, EventArgs e)
         {
             //FolderBrowserDialog path = new FolderBrowserDialog();
-            fbD_path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
-            if (fbD_path.ShowDialog() == DialogResult.OK) 
+            VistaFolderBrowserDialog path = new VistaFolderBrowserDialog();
+            path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            if (path.ShowDialog() == DialogResult.OK) 
             { 
-                txtReadData(fbD_path.SelectedPath);
+                txtReadData(path.SelectedPath);
                 txtFT.Enabled = true;
                 txtFS.Enabled = true;
                 btnDatamodify.Enabled = true;
                 LV2.Enabled = true;
             }
             else { return; }
-        }
-
-        private enum enLV2Column : int
-        { 
-            id = 0,
-            Axis = 1,
-            K1K2 = 2,
-            FT = 3,
-            FS = 4,
-            pid = 5,
-            done_datetime = 6,
-            last_datetime = 7,
-            ArmModel_SN = 8
-        }
-
-        private void LV2_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            txtdataID.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.id].Text;
-            txtFT.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.FT].Text;
-            txtFS.Text = LV2.FocusedItem.SubItems[(int)enLV2Column.FS].Text;
         }
 
         private void btnDatamodify_Click(object sender, EventArgs e)
@@ -1075,24 +1160,135 @@ namespace AutomaticSystem
 
         private void btnK1K2_Click(object sender, EventArgs e)
         {
+            initchecklistbox();
             if (plK1K2.Visible == true)
             {
                 plK1K2.Visible = false;
+                // vpK1K2 = 1 為縮減plK1K2 size
+                plK1K2.Size = new Size(plK1K2.Width - 170, 379);
+                vplK1K2 = 1;
+                if (K1K2.Length == 0)
+                { K1K2 = txtK1K2.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None).Where(x => !string.IsNullOrEmpty(x)).ToArray(); }
             }
             else
             {
+                plK1K2.Size = new Size(241, 379);
                 plK1K2.Visible = true;
-                //if (K1K2.Where(val => val != String.Empty).ToArray().Length == 0) { txtK1K2.Text = "\r\n目前無資訊"; return; }
-                K1K2 = new string[] {
-                    "CollisionX_10", "CollisionX_25", "CollisionX_30", "CollisionX_35", "CollisionX_40", "CollisionX_50", "CollisionX_60", "CollisionX_75",
-                    "CollisionY_10", "CollisionY_25", "CollisionY_30", "CollisionY_35", "CollisionY_40", "CollisionY_50", "CollisionY_60", "CollisionY_75",
-                    "CollisionZ_10", "CollisionZ_25", "CollisionZ_30", "CollisionZ_35", "CollisionZ_40", "CollisionZ_50", "CollisionZ_60", "CollisionZ_75"
-                };
-                for (int i = 0; i < K1K2.Length; i++)
+                plK1K2.Location = new Point(gbData.Location.X + 121, btnK1K2.Location.Y + 3);
+                if (K1K2.Length > 0)
                 {
-                    txtK1K2.Text += K1K2[i] + "\r\n";
+                    for (int i = 0; i < K1K2.Length; i++)
+                    {
+                        if (K1K2[i].Contains("X_10")) { clbK1K2.SetItemChecked(1, true); }
+                        else if (K1K2[i].Contains("X_25")) { clbK1K2.SetItemChecked(2, true); }
+                        else if (K1K2[i].Contains("X_30")) { clbK1K2.SetItemChecked(3, true); }
+                        else if (K1K2[i].Contains("X_35")) { clbK1K2.SetItemChecked(4, true); }
+                        else if (K1K2[i].Contains("X_40")) { clbK1K2.SetItemChecked(5, true); }
+                        else if (K1K2[i].Contains("X_50")) { clbK1K2.SetItemChecked(6, true); }
+                        else if (K1K2[i].Contains("X_60")) { clbK1K2.SetItemChecked(7, true); }
+                        else if (K1K2[i].Contains("X_75")) { clbK1K2.SetItemChecked(8, true); }
+                        else if (K1K2[i].Contains("Y_10")) { clbK1K2.SetItemChecked(9, true); }
+                        else if (K1K2[i].Contains("Y_25")) { clbK1K2.SetItemChecked(10, true); }
+                        else if (K1K2[i].Contains("Y_30")) { clbK1K2.SetItemChecked(11, true); }
+                        else if (K1K2[i].Contains("Y_35")) { clbK1K2.SetItemChecked(12, true); }
+                        else if (K1K2[i].Contains("Y_40")) { clbK1K2.SetItemChecked(13, true); }
+                        else if (K1K2[i].Contains("Y_50")) { clbK1K2.SetItemChecked(14, true); }
+                        else if (K1K2[i].Contains("Y_60")) { clbK1K2.SetItemChecked(15, true); }
+                        else if (K1K2[i].Contains("Y_75")) { clbK1K2.SetItemChecked(16, true); }
+                        else if (K1K2[i].Contains("Z_10")) { clbK1K2.SetItemChecked(17, true); }
+                        else if (K1K2[i].Contains("Z_25")) { clbK1K2.SetItemChecked(18, true); }
+                        else if (K1K2[i].Contains("Z_30")) { clbK1K2.SetItemChecked(19, true); }
+                        else if (K1K2[i].Contains("Z_35")) { clbK1K2.SetItemChecked(20, true); }
+                        else if (K1K2[i].Contains("Z_40")) { clbK1K2.SetItemChecked(21, true); }
+                        else if (K1K2[i].Contains("Z_50")) { clbK1K2.SetItemChecked(22, true); }
+                        else if (K1K2[i].Contains("Z_60")) { clbK1K2.SetItemChecked(23, true); }
+                        else if (K1K2[i].Contains("Z_75")) { clbK1K2.SetItemChecked(24, true); }
+                    }
+                }
+                if (K1K2.Length == 24) { clbK1K2.SetItemChecked(0, true); } else { clbK1K2.SetItemChecked(0, false); }
+            }
+        }
+
+        int vplK1K2 = 1;
+        private void plK1K2_DoubleClick(object sender, EventArgs e)
+        {
+            if (vplK1K2 == 0)
+            { plK1K2.Size = new Size(plK1K2.Width - 170, 379); clbK1K2.Visible = false; vplK1K2 = 1; }
+            else { plK1K2.Size = new Size(plK1K2.Width + 170, 379); clbK1K2.Visible = true; vplK1K2 = 0; }
+        }
+
+        private void cbForcemax_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbForcemax.Checked)
+            {
+                LV2.Clear();
+                LV2.Columns.Add("Axis", 50, HorizontalAlignment.Center);
+                LV2.Columns.Add("K1K2", 100, HorizontalAlignment.Center);
+                LV2.Columns.Add("Force(Max)", 120, HorizontalAlignment.Left);
+                LV2.Columns.Add("Force(Static)", 120, HorizontalAlignment.Left);
+                LV2.Columns.Add("SensorID", 80, HorizontalAlignment.Left);
+
+                int FT1, FT2, FT3, vNewId = NewId, vID = 2;
+                for (int i = 0; i <= K1K2.Length - 1; i++)
+                {
+                    Sqlstr = _SqlData.GetData("Data", 4);
+                    Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                    Sqlstr = Sqlstr.Replace("?2", vNewId + vID + "");
+                    DataTable DT0 = ConnectQuery(Sqlstr);
+                    FT1 = int.Parse(DT0.Rows[0][0].ToString());
+                    FT2 = int.Parse(DT0.Rows[1][0].ToString());
+                    FT3 = int.Parse(DT0.Rows[2][0].ToString());
+                    if (FT1 - FT2 <= 5 && FT1 - FT3 <= 5 && -(FT2 - FT3) * -1 <= 5)
+                    {
+                        Sqlstr = _SqlData.GetData("Data", 5);
+                        Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                        Sqlstr = Sqlstr.Replace("?2", vNewId + vID + "");
+                    }
+                    else if (FT1 - FT2 > 5 && FT1 - FT3 > 5 && -(FT2 - FT3) * -1 <= 5)
+                    {
+                        if (FT1 == FT2)
+                        {
+                            Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT <= (select max(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                            Sqlstr += "and FT > (select min(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2 order by FT desc";
+                            Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                            Sqlstr = Sqlstr.Replace("?2", vNewId + vID + "");
+                        }
+                        else if (FT2 == FT3)
+                        {
+                            Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT < (select max(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                            Sqlstr += "and FT >= (select min(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2 order by FT desc";
+                            Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                            Sqlstr = Sqlstr.Replace("?2", vNewId + vID + "");
+                        }
+                        else
+                        {
+                            Sqlstr = _SqlData.GetData("Data", 6);
+                            Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                            Sqlstr = Sqlstr.Replace("?2", vNewId + vID + "");
+                        }
+                    }
+                    else
+                    {
+                        Sqlstr = _SqlData.GetData("Data", 5);
+                        Sqlstr = Sqlstr.Replace("?1", vNewId + "");
+                        Sqlstr = Sqlstr.Replace("?2", vNewId + vID + ""); //原本有+1
+                    }
+                    vNewId += 3;
+
+                    DataTable DT = ConnectQuery(Sqlstr);
+                    foreach (DataRow DR in DT.Rows)
+                    {
+                        ListViewItem lvitem = new ListViewItem();
+                        lvitem.Text = DR["Axis"].ToString();
+                        lvitem.SubItems.Add(DR["K1K2"].ToString());
+                        lvitem.SubItems.Add(DR["FT"].ToString());
+                        lvitem.SubItems.Add(DR["FS"].ToString());
+                        lvitem.SubItems.Add(DR["pid"].ToString());
+                        LV2.Items.Add(lvitem);
+                    }
                 }
             }
+            else { initLV2("Max"); }
         }
 
         private void btnOK_Click(object sender, EventArgs e)

@@ -509,7 +509,7 @@ namespace AutomaticSystem
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(267, 34);
             this.txtIP.TabIndex = 1;
-            this.txtIP.Text = "172.25.50.39";
+            this.txtIP.Text = "172.25.50.27";
             this.txtIP.Enter += new System.EventHandler(this.TextBoxE_Enter);
             this.txtIP.Leave += new System.EventHandler(this.TextBoxL_Leave);
             // 

@@ -167,3 +167,17 @@ D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.csproj.CopyComplete
 D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.exe
 D:\ISO15066 tools\AutomaticSystem\obj\Debug\AutomaticSystem.pdb
 D:\1SO15066 自動化系統\AutomaticSystem\obj\Debug\AutomaticSystem.frm_test.resources
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\Microsoft.WindowsAPICodePack.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\Ookii.Dialogs.WinForms.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Buffers.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Memory.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Numerics.Vectors.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Resources.Extensions.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\Microsoft.WindowsAPICodePack.xml
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\Ookii.Dialogs.WinForms.pdb
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Buffers.xml
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Memory.xml
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Numerics.Vectors.xml
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Resources.Extensions.xml
+D:\1SO15066 自動化系統\AutomaticSystem\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml

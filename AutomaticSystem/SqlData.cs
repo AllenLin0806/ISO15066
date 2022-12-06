@@ -132,10 +132,12 @@ namespace AutomaticSystem
                     Sqlstr = "select FT,FS from ThingsValue where id >=?1 and id<=?2 order by FT desc";
                     break;
                 case 5: //取最大Force(Max)跟FS
-                    Sqlstr = "select Axis,K1K2,FT,FS from ThingsValue where FT=(select max(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2";
+                    Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT=(select max(FT) from ThingsValue where id >=?1 and id<=?2) and id >=?1 and id<=?2";
                     break;
                 case 6: //取中間值Force(Max)跟FS
-                    Sqlstr = "select Axis,K1K2,FT,FS from ThingsValue where id >=?1 and id<=?2 and FT < (select max(FT) from ThingsValue) order by FT desc";
+                    Sqlstr = "select Axis,K1K2,FT,FS,pid from ThingsValue where FT < (select max(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                    Sqlstr += "and FT > (select min(FT) from ThingsValue where id >=?1 and id<=?2) ";
+                    Sqlstr += "and id >=?1 and id<=?2 order by FT desc";
                     break;
                 case 7: //查詢全部資訊
                     Sqlstr = "select * from ThingsValue where id >=?1";
