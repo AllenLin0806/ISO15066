@@ -201,6 +201,33 @@ namespace AutomaticSystem
             }
         }
 
+        public void txtReadRTX(string Rtxpath)
+        {
+            foreach (string fname in System.IO.Directory.GetFiles(Rtxpath))
+            {
+                if (System.IO.Path.GetFileNameWithoutExtension(fname) == "RTX64Server" && System.IO.Path.GetExtension(fname) == ".txt")
+                {
+                    string line;
+                    vRtx.Clear();  //做完一次就清除
+
+                    // 一次讀取一行
+                    System.IO.StreamReader file = new System.IO.StreamReader(fname);
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        if (line.Contains("GroupName") || line.Contains("SoftwareVersion"))
+                        {
+                            if (vRtx.Count < 4) { vRtx.Add(line.Trim()); }
+                            else
+                            {
+                                if (vRtx[2] == line || vRtx[3] == line) { }
+                                else { vRtx.Add(line.Trim()); }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         List<string> vNumber = new List<string>();
         public void txtReadData(string Rtxpath)
         {
@@ -286,7 +313,7 @@ namespace AutomaticSystem
                 if (txtFileName.Text == "")
                 { MsgBox.Show("未輸入檔案名稱，請重新輸入！", "WARNING", enMessageButton.OK, enMessageType.Warning); return; }
 
-                if (cbHW.Text == "3.2") { txtRead(txtPath.Text.Replace("\\Enable","")); }
+                if (cbHW.Text == "3.2") { txtReadRTX(txtPath.Text); }
                 else { txtRead(txtPath.Text); }
 
                 //創建Workbook
@@ -346,7 +373,41 @@ namespace AutomaticSystem
                             i++;
                         }
                     }
-                    else { MsgBox.Show("數量有誤，請重新確認！", "警告", enMessageButton.OK, enMessageType.Warning); return; }
+                    else { MsgBox.Show("Robot_Configuration 數量有誤，請重新確認！", "警告", enMessageButton.OK, enMessageType.Warning); return; }
+                }
+                else //for 3.2 RTX
+                {
+                    if (vRtx.Count > 4)
+                    {
+                        for (int i = 0; i < vRtx.Count; i++)
+                        {
+                            found = vRtx[i].IndexOf("=") + 1;
+                            switch (vRtx[i].Substring(found))
+                            {
+                                case "Modular_IO":
+                                    if (i < 4)
+                                    {
+                                        found = vRtx[i + 1].IndexOf("=") + 1;
+                                        sheet_M.Range[27, 20].Text = vRtx[i + 1].Substring(found);
+                                    }
+                                    else
+                                    {
+                                        found = vRtx[i + 1].IndexOf("=") + 1;
+                                        sheet_M.Range[33, 20].Text = vRtx[i + 1].Substring(found);
+                                    }
+                                    break;
+                                case "AC_Servo_Driver":
+                                    found = vRtx[i + 1].IndexOf("=") + 1;
+                                    sheet_M.Range[31, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                                case "Safety":
+                                    found = vRtx[i + 1].IndexOf("=") + 1;
+                                    sheet_M.Range[29, 20].Text = vRtx[i + 1].Substring(found);
+                                    break;
+                            }
+                            i += 1;
+                        }
+                    }
                 }
                 sheet_M.Range[21, 20].Text = txtArmName.Text;
                 sheet_M.Range[23, 20].Text = txtCbName.Text;
@@ -950,9 +1011,9 @@ namespace AutomaticSystem
         private void btnClear2_Click(object sender, EventArgs e)
         {
             ClearDataE((int)panelAll.gbUp);
-            EnableData(0);
+            //EnableData(0);
             initLV(cbLV.Text);
-            gbUp.Text = "新增資訊";
+            gbUp.Text = "請選擇項目";
         }
         private void ClearDataE(int panel)
         {
@@ -984,6 +1045,9 @@ namespace AutomaticSystem
                     LV1.Clear();
                     cbLV.SelectedIndex = 0;
                     txtHW2.Focus();
+
+                    foreach (var btn in gbUp.Controls.OfType<Button>())
+                    { btn.Enabled = true; }
                     break;
                 case 3:
                     gbData.Enabled = false;
@@ -1049,6 +1113,7 @@ namespace AutomaticSystem
             ClearDataE((int)panelAll.gbUpE);
             ClearDataE((int)panelAll.pMain);
             ClearDataE((int)panelAll.gbUp);
+            gbUp.Text = "請選擇項目";
             Comboboxitems(cbHW, "HW_Version", 1, "hw_version");
             Comboboxitems(cbTester, "Tester", 1, "Name");
         }
@@ -1136,7 +1201,7 @@ namespace AutomaticSystem
         {
             //FolderBrowserDialog path = new FolderBrowserDialog();
             VistaFolderBrowserDialog path = new VistaFolderBrowserDialog();
-            path.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            path.SelectedPath = txtPath.Text;
             if (path.ShowDialog() == DialogResult.OK) 
             { 
                 txtReadData(path.SelectedPath);
@@ -1350,7 +1415,7 @@ namespace AutomaticSystem
 
             ClearDataE((int)panelAll.gbUp);
             initLV(cbLV.Text);
-            gbUp.Text = "新增資訊";
+            gbUp.Text = "請選擇項目";
         }
         #endregion
     }

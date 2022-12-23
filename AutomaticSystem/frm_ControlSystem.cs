@@ -346,7 +346,7 @@ namespace AutomaticSystem
                                 MsgBox.Show("調整位置後，按確認繼續執行...", "警告", enMessageButton.OK, enMessageType.Warning);
                                 Thread.Sleep(2000);
                             }
-                            else { btnStop.PerformClick(); btnCancel.PerformClick(); lblDisplay.Visible = false; return; };
+                            else { btnStop.PerformClick(); btnCancel.PerformClick(); lblDisplay.Visible = false; btnDone.PerformClick(); return; };
                         }
                     }
                     if (a == 0 && vPoint[a] != "0" && txtChange.Text.Contains("Y")) { MsgBox.Show("X-Axis已測試完畢，請將手臂附近清出空間，\n並按確認執行Y-Axis！", "警告", enMessageButton.OK, enMessageType.Warning); backgroundWorker1.ReportProgress(a + 1 * 33); }
